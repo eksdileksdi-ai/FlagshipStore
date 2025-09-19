@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flagship Business Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-pink-100 text-pink-900 flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-pink-800 text-white py-6 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-2xl md:text-3xl font-bold">Flagship Business Store</h1>
+            <p class="text-sm md:text-base text-pink-200 mt-2">
+                Premium brands for the discerning customer
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 md:px-8 py-8 w-full">
+        <!-- Home Page - First thing the user sees -->
+        <section id="home-page" class="flex flex-col items-center justify-center text-center p-8 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-pink-800">Welcome to My Store</h2>
+            <p class="text-pink-600 mb-6">Click the handsome dog filter picture to start</p>
+            <div 
+                onclick="showStore()"
+                class="cursor-pointer rounded-full overflow-hidden transition-transform duration-300 hover:scale-105 shadow-xl border-4 border-pink-300 w-48 h-48 md:w-64 md:h-64"
+            >
+                <img src="https://i.imgur.com/6jR07Go.jpeg" alt="Your Photo" class="w-full h-full object-cover"/>
+            </div>
+        </section>
+
+        <!-- Store Page - Initially hidden -->
+        <section id="store-page" class="hidden">
+            <!-- Brand Selection Section -->
+            <section class="mb-12">
+                <h2 class="text-xl md:text-2xl font-semibold mb-6 text-center text-pink-800">Select Your Brand</h2>
+                
+                <div id="brands-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <!-- Brand buttons will be injected here by JavaScript -->
+                </div>
+
+                <!-- Active Brand Display -->
+                <div id="brand-display" class="hidden">
+                    <!-- Brand content will be injected here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Order message display -->
+            <div id="order-message-container">
+                <!-- Order message will be injected here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-pink-200 border-t border-pink-300 py-8 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-sm text-pink-700">
+                &copy; 2025 Flagship Business Store. Mahal na mahal kita sir gabriel
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Data for brands and products
+        const brands = [
+            { 
+                id: 'nike', 
+                name: 'Nike', 
+                description: "Just Do It. Explore the latest Nike collections and innovative sportswear.",
+                logo: "https://logos-world.net/wp-content/uploads/2020/04/Nike-Logo-1971-present.jpg",
+                products: [
+                    { name: 'Nike Air Force 1', price: '₱ 5,495.00', image: "https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+FORCE+1+%2707.png" },
+                    { name: 'Jordan 1 Retro High Dior', price: '₱ 500,000.00', image: "https://d2cva83hdk3bwc.cloudfront.net/jordan-1-retro-high-dior-1.jpg" },
+                    { name: 'Nike SB Dunk Low Triple Pink', price: '₱ 6,500.00', image: "https://kingwalk.com/wp-content/uploads/2022/11/Nike-SB-DUnk-Low-Triple-Pink-1.jpg" }
+                ]
+            },
+            { 
+                id: 'adidas', 
+                name: 'Adidas', 
+                description: "Impossible is Nothing. Discover Adidas performance and lifestyle footwear.",
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1000px-Adidas_Logo.svg.png",
+                products: [
+                    { name: 'Adidas Originals Gazelle In Collegiate Navy & White', price: '₱ 4,500.00', image: "https://is4.revolveassets.com/images/p4/n/uv/ADIO-MZ159_V1.jpg" },
+                    { name: 'Gazelle Foundation Sneaker', price: '₱ 4,200.00', image: "https://is4.revolveassets.com/images/p4/n/z/ADIO-MZ108_V1.jpg" },
+                    { name: 'Stan Smith', price: '₱ 3,800.00', image: "https://is4.revolveassets.com/images/p4/n/z/ADIO-MZ79_V1.jpg" }
+                ]
+            },
+            { 
+                id: 'bapesta', 
+                name: 'Bapesta', 
+                description: "Streetwear excellence. Experience the iconic Bapesta sneaker culture.",
+                logo: "https://logos-world.net/wp-content/uploads/2024/11/Bapesta-Logo.png",
+                products: [
+                    { name: 'Bape Pink Camo Hoodie', price: '₱ 15,000.00', image: "https://cdn.shopify.com/s/files/1/0014/9028/8705/products/Bape_Bapesta_Allover_Print_Fullzip_Hoodie_Pink_-_XS_4_1200x1200.jpg?v=1627028769" },
+                    { name: 'Bape Shark Fire Camo Hoodie', price: '₱ 18,500.00', image: "https://bapesta.us/wp-content/uploads/2023/08/BAPE-Shark-Fire-Camo-Hoodie-800x800.jpeg" },
+                    { name: 'Bape Shark T-Shirt', price: '₱ 8,000.00', image: "https://i.pinimg.com/736x/3a/e2/ec/3ae2ec1c050f490bd336cee3bcf066af.jpg" }
+                ]
+            },
+            { 
+                id: 'hghmnds', 
+                name: 'HGHMNDS', 
+                description: "Elevate your thinking. Premium apparel for the modern innovator.",
+                logo: "https://tse3.mm.bing.net/th/id/OIP.iyjQgDz1EB6vSvJgZeDMawHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                products: [
+                    { name: 'HGHMNDS Black Graphic Tee', price: '₱ 850.00', image: "https://hghmnds.ph/cdn/shop/files/AJ1.jpg?v=1758171506&width=713" },
+                    { name: 'HGHMNDS Astronaut Tee', price: '₱ 950.00', image: "https://hghmnds.ph/cdn/shop/files/U1_9936b96f-6e90-4ca2-bf59-0351161bad70.jpg?v=1758169472&width=713" },
+                    { name: 'HGHMNDS V-Day Tee', price: '₱ 900.00', image: "https://hghmnds.ph/cdn/shop/files/P1_9ccb6eef-af51-425d-87a9-fb58e66e150d.jpg?v=1758166106&width=713" },
+                    { name: 'HGHMNDS Airwaves Graphic Tee', price: '₱ 850.00', image: "https://hghmnds.ph/cdn/shop/files/AW1.jpg?v=1758190883&width=713" },
+                    { name: 'HGHMNDS Cloud Graphic Tee', price: '₱ 850.00', image: "https://hghmnds.ph/cdn/shop/files/AC1.jpg?v=1758168449&width=713" }
+                ]
+            }
+        ];
+
+        // Function to show the store page
+        function showStore() {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('store-page').classList.remove('hidden');
+        }
+        
+        // This is a global function now so it can be called from the onclick attribute
+        window.showStore = showStore;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const brandsContainer = document.getElementById('brands-container');
+            const brandDisplay = document.getElementById('brand-display');
+            const orderMessageContainer = document.getElementById('order-message-container');
+
+            function renderBrands() {
+                brandsContainer.innerHTML = brands.map(brand => `
+                    <button
+                        onclick="handleBrandClick('${brand.id}')"
+                        class="h-16 md:h-20 text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center gap-2 rounded-lg shadow-md bg-white text-pink-800 border-2 border-pink-300"
+                        id="btn-${brand.id}"
+                    >
+                        <img src="${brand.logo}" alt="${brand.name} logo" class="h-10 w-auto object-contain" />
+                    </button>
+                `).join('');
+            }
+
+            window.handleBrandClick = (brandId) => {
+                // Remove active styling from all buttons
+                document.querySelectorAll('#brands-container button').forEach(btn => {
+                    btn.classList.remove('bg-pink-700', 'text-white');
+                    btn.classList.add('bg-white', 'text-pink-800');
+                });
+
+                // Add active styling to the clicked button
+                document.getElementById(`btn-${brandId}`).classList.add('bg-pink-700', 'text-white');
+                document.getElementById(`btn-${brandId}`).classList.remove('bg-white', 'text-pink-800');
+                
+                const activeBrandData = brands.find(b => b.id === brandId);
+                
+                let productsHtml = '';
+                if (activeBrandData.products.length > 0) {
+                    productsHtml = activeBrandData.products.map(product => `
+                        <div class="bg-pink-50 p-4 rounded-lg border border-pink-200 text-center">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover rounded-md mb-4" />
+                            <h4 class="font-semibold text-lg text-pink-800 mb-2">${product.name}</h4>
+                            <p class="text-pink-600 mb-4">${product.price}</p>
+                            <button
+                                onclick="handleOrder('${product.name}')"
+                                class="bg-pink-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-700 transition-colors"
+                            >
+                                Order Now
+                            </button>
+                        </div>
+                    `).join('');
+                    productsHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">${productsHtml}</div>`;
+                } else {
+                    productsHtml = `<div class="text-center p-8 text-pink-500 bg-pink-50 rounded-lg">
+                        <p>No products available yet. Check back soon for new arrivals!</p>
+                    </div>`;
+                }
+
+                brandDisplay.classList.remove('hidden');
+                brandDisplay.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg border border-pink-200 shadow-lg animate-fade-in-up">
+                        <div class="text-center">
+                            <h3 class="text-lg md:text-xl font-semibold mb-4 text-pink-800">
+                                ${activeBrandData.name} Collection
+                            </h3>
+                            <p class="text-pink-600 mb-6">
+                                ${activeBrandData.description}
+                            </p>
+                            ${productsHtml}
+                        </div>
+                    </div>
+                `;
+            };
+
+            window.handleOrder = (productName) => {
+                orderMessageContainer.innerHTML = `
+                    <div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-500 animate-slide-in-right">
+                        Order placed for ${productName}!
+                    </div>
+                `;
+                setTimeout(() => {
+                    orderMessageContainer.innerHTML = '';
+                }, 3000);
+            };
+
+            renderBrands();
+        });
+    </script>
+</body>
+</html>
